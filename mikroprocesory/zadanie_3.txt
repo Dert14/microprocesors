@@ -1,0 +1,106 @@
+#include <reg52.h>
+#include <intrins.h>
+#include "lcd.h"
+#include "mkd51sim.h"
+ unsigned char xdata PTWE at 0x8008;   
+ unsigned char xdata PTWY at 0x8009;  
+ unsigned char xdata SEG at 0x8018;
+ char X0 = 1;
+ char X1 = 0; 
+ char X2 = 0; 
+ char X3 = 0; 
+ char X4 = 0; 
+ char X5 = 0; 
+ unsigned char licznik=0;
+ unsigned int licz_petli_delay=0;
+ char licz_modulo=0;
+ int dioda = 1;
+ void main(void) 
+{
+	PTWE=dioda;
+	while(1)
+	{
+		if(dioda >= 256) dioda = 1;
+		
+		if(!(PTWY&1))
+		{
+			X0 = 1;
+			X1 = 0;
+			X2 = 0;
+			X3 = 0;
+			X4 = 0;
+			X5 = 0;
+		}
+		if(!(PTWY&2))
+		{
+			X0 = 0;
+			X1 = 1;
+			X2 = 0;
+			X3 = 0;
+			X4 = 0;
+			X5 = 0;
+		}
+		if(!(PTWY&4))
+		{
+			X0 = 0;
+			X1 = 0;
+			X2 = 1;
+			X3 = 0;
+			X4 = 0;
+			X5 = 0;
+		}
+		if(!(PTWY&8))
+		{
+			X0 = 0;
+			X1 = 0;
+			X2 = 0;
+			X3 = 1;
+			X4 = 0;
+			X5 = 0;
+		}
+		if(!(PTWY&16))
+		{
+			X0 = 0;
+			X1 = 0;
+			X2 = 0;
+			X3 = 0;
+			X4 = 1;
+			X5 = 0;
+		}
+		if(!(PTWY&32))
+		{
+			X0 = 0;
+			X1 = 0;
+			X2 = 0;
+			X3 = 0;
+			X4 = 0;
+			X5 = 1;
+		}
+		if(X0==1)
+		{
+		for(licz_petli_delay = 0; licz_petli_delay < 8000; licz_petli_delay++) _nop_();
+		}
+		if(X1==1)
+		{
+		for(licz_petli_delay = 0; licz_petli_delay < 13000; licz_petli_delay++) _nop_();
+		}
+		if(X2==1)
+		{
+		for(licz_petli_delay = 0; licz_petli_delay < 20000; licz_petli_delay++) _nop_();
+		}
+		if(X3==1)
+		{
+		for(licz_petli_delay = 0; licz_petli_delay < 25000; licz_petli_delay++) _nop_();
+		}
+		if(X4==1)
+		{
+		for(licz_petli_delay = 0; licz_petli_delay < 30000; licz_petli_delay++) _nop_();
+		}
+		if(X5==1)
+		{
+		for(licz_petli_delay = 0; licz_petli_delay < 35000; licz_petli_delay++) _nop_();
+		}
+		PTWE = dioda;
+		dioda = dioda*2;
+	}
+}
