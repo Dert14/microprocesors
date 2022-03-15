@@ -1,0 +1,31 @@
+#include <reg52.h>
+#include <intrins.h>
+#include "lcd.h"
+#include "mkd51sim.h"
+unsigned char xdata POT0 at 0x8005;  
+unsigned char xdata tblcw[32]="                                ";
+unsigned char xdata tymczasowa[]="Randomowe slowa do zapelnienia wyswietlacza";
+unsigned char modulo = 0;
+//char setki = 0;
+char dziesiatki = 0;
+char jednosci = 0;
+char i = 0;
+char j = 0;
+unsigned int delay = 0;
+void main(void) 
+	{
+prglcd();
+while(1)
+	{
+	if(i < 12)
+	{
+		for(j = 0; j < 32; j++)
+		{
+			tblcw[j] = tymczasowa[i+j];
+		}
+		i++;
+	}
+	disptext(tblcw);
+	for(delay=0;delay < 40000;delay++) _nop_();
+ }
+}

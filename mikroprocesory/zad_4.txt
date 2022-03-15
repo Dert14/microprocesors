@@ -1,0 +1,26 @@
+#include <reg52.h>
+#include <intrins.h>
+#include "lcd.h"
+#include "mkd51sim.h"
+unsigned char xdata POT0 at 0x8005;  
+unsigned char xdata tblcw[]="      modulo 100                ";
+unsigned char modulo = 0;
+//char setki = 0;
+char dziesiatki = 0;
+char jednosci = 0;
+void main(void) {
+unsigned int delay;
+prglcd();
+while(1){
+	int someInt = 368;
+	for(delay=0;delay<20000;delay++) _nop_();
+	modulo++;
+	jednosci = modulo % 10;
+	dziesiatki = (modulo % 100)/10;
+	//setki = (modulo % 1000)/100;
+	tblcw[31]='0'+jednosci;
+	tblcw[30]='0'+dziesiatki;
+	//tblcw[11]='0'+setki;
+	disptext(tblcw);
+ }
+}

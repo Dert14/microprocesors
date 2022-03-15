@@ -1,0 +1,40 @@
+#include <reg52.h>
+#include <intrins.h>
+#include "lcd.h"
+#include "mkd51sim.h"
+unsigned char xdata POT0 at 0x8005;
+unsigned char xdata POT1 at 0x8006;  
+unsigned char xdata tblcw[]="                                ";
+char setki_1 = 0;
+char dziesiatki_1 = 0;
+char jednosci_1 = 0;
+char setki_2 = 0;
+char dziesiatki_2 = 0;
+char jednosci_2 = 0;
+unsigned char odczyt_1 = 0;
+unsigned char odczyt_2 = 0;
+void main(void) {
+unsigned char delay;
+prglcd();
+while(1){
+	POT0=0;	
+	for(delay=0;delay<200;delay++) _nop_(); //czy mozna jednoczesnie odczytac oba?
+	odczyt_1 = POT0;
+	POT1=0;	
+	for(delay=0;delay<200;delay++) _nop_();
+	odczyt_2 = POT1;
+	jednosci_1 = odczyt_1 % 10;
+	dziesiatki_1 = (odczyt_1 % 100)/10;
+	setki_1 = (odczyt_1 % 1000)/100;
+	jednosci_2 = odczyt_2 % 10;
+	dziesiatki_2 = (odczyt_2 % 100)/10;
+	setki_2 = (odczyt_2 % 1000)/100;
+	tblcw[31]='0'+jednosci_1;
+	tblcw[30]='0'+dziesiatki_1;
+	tblcw[29]='0'+setki_1;
+	tblcw[15]='0'+jednosci_2;
+	tblcw[14]='0'+dziesiatki_2;
+	tblcw[13]='0'+setki_2;
+	disptext(tblcw);
+ }
+}
