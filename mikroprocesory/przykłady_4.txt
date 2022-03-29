@@ -1,0 +1,43 @@
+int main(void) {
+	HAL_Init();
+	SystemClock_Config();
+
+
+#ifndef STMSIM
+	BSP_SDRAM_Init();
+	LCD_Config();
+#endif
+
+	RCC->AHB1ENR |= RCC_AHB1Periph_GPIOG; //odblokowanie zegara portu G, każdy układ potrzebuje zegara!!!
+	GPIOG->MODER |= GPIO_Mode_OUT << (14*2);// 1 - output
+	RCC->AHB1ENR |= RCC_AHB1Periph_GPIOA;//odblokowanie zegara portu A
+
+	while (1) {
+		if(!(GPIOA->IDR&1)) GPIOG->BSRR = GPIO_Pin_14; //0x4000
+     	else GPIOG->BSRR = GPIO_Pin_14<<16; //0x40000000
+
+
+		Clear_And_Reload_Screen();
+	}
+}
+
+
+
+RCC->AHB1ENR |= RCC_AHB1Periph_GPIOG;
+ GPIOG->MODER |= GPIO_Mode_OUT << (14*2);// 1 - output
+ GPIOG->OTYPER|= GPIO_OType_PP << 14;//0 - push-pull (def.)
+ GPIOG->PUPDR |= GPIO_PuPd_NOPULL << (14*2);//0 - (default)
+ RCC->AHB1ENR |= RCC_AHB1Periph_GPIOA;
+ GPIOA->MODER |= GPIO_Mode_IN; // 0 - input (default)
+ GPIOA->PUPDR |= GPIO_PuPd_NOPULL ; // 0 - (default)
+ if(!(GPIOA->IDR&1)) GPIOG->BSRR = GPIO_Pin_14; //0x4000 //idr (do odczytu) jak PTWE, rejestr danych wejściowych, odr do zapisu stanu portu
+ else GPIOG->BSRR = GPIO_Pin_14<<16; //0x40000000 //BSRR (bit set reset register )16 najmłodszych ustawia a 16 najstarszych kasuje,BSRR2 to U1
+//0x002 000
+
+
+ GPIOA->MODER |=GPIO_Mode_AN;
+ RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
+ ADC1->CR2=ADC_CR2_ADON;// włączenie ADC1
+ ADC1->CR2|=ADC_CR2_SWSTART;// start pomiaru
+while(!(ADC1->SR&ADC_SR_EOC));// oczekiwanie na zakończenie pomiaru
+ pomiar=ADC1->DR; // odczyt wyniku pomiaru
