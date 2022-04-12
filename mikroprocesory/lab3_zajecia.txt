@@ -1,0 +1,57 @@
+#include "main_base.h"
+
+int x = 80, y = 120;
+
+unsigned short int RGB16Pack(unsigned char, unsigned char, unsigned char);
+
+
+int main(void) {
+	HAL_Init();
+	SystemClock_Config();
+
+
+#ifndef STMSIM
+	BSP_SDRAM_Init();
+	LCD_Config();
+#endif
+
+
+
+	while (1) {
+
+
+		Clear_And_Reload_Screen();
+
+		//gora
+		for (int yy = 0; yy < 80; yy++) {
+			unsigned short int *pixel = (unsigned short int*) (LCD_BUF + x + (y + yy) * 240);
+			*pixel++ = (0xf800);
+		}
+		//dol
+		for (int yy = 0; yy < 80; yy++) {
+			unsigned short int *pixel = (unsigned short int*) (LCD_BUF + x + 80 + (y + yy) * 240);
+			*pixel++ = (0xf800);
+		}
+		//prawo
+		for (int yy = 0; yy < 80; yy++) {
+				unsigned short int *pixel = (unsigned short int*) (LCD_BUF + (x + yy) + y * 240);
+				*pixel++ = (0xf800);
+		}
+		//lewo
+		for (int yy = 0; yy < 80; yy++) {
+				unsigned short int *pixel = (unsigned short int*) (LCD_BUF + (x + yy) + (y + 80) * 240);
+				*pixel++ = (0xf800);
+		}
+		//1 przekatna
+		for (int yy = 0; yy < 80; yy++) {
+				unsigned short int *pixel = (unsigned short int*) (LCD_BUF + (x + yy) + (y + yy) * 240);
+				*pixel++ = (0xffe0);
+		}
+		//2 przekatna
+		for (int yy = 0; yy < 80; yy++) {
+				unsigned short int *pixel = (unsigned short int*) (LCD_BUF + (x + 80 - yy) + (y + yy) * 240);
+				*pixel++ = (0xffe0);
+		}
+	}
+}
+
