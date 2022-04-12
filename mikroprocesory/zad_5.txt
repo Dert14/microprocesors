@@ -18,7 +18,7 @@ unsigned char delay;
 prglcd();
 while(1){
 	POT0=0;	
-	for(delay=0;delay<200;delay++) _nop_(); //czy mozna jednoczesnie odczytac oba?
+	for(delay=0;delay<200;delay++) _nop_(); //czy mozna jednoczesnie odczytac oba? otoz nie xd
 	odczyt_1 = POT0;
 	POT1=0;	
 	for(delay=0;delay<200;delay++) _nop_();
