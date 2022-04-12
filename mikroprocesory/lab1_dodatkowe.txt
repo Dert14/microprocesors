@@ -8,6 +8,7 @@
 sbit P1_6 = P1^6;  
  unsigned char licznik=0;
  unsigned int licz_petli_delay=0;
+ char liczba_obiegow = 0;
  char licz_modulo=0;
  bit stan = 0;
  void main(void) 
@@ -15,39 +16,40 @@ sbit P1_6 = P1^6;
 	P1=P1&0xfc; //P1.0=0,P1.1=0  P1&0x1d;
 	while(1)
 	{
-		
 		if(!(PTWE&32) && stan == 0)
 		{
-			licz_modulo++;
 			stan = 1;
 		}
 		if(stan == 1 && (PTWE&32))
 		{
 			stan = 0;
 		}
-		if(!(PTWE&16))
+		if(stan==0)
 		{
-			licz_modulo=0;
-			PTWY=1;
+			for(licz_petli_delay = 0; licz_petli_delay < 5000; licz_petli_delay++) _nop_();
+			licz_modulo++;
 		}
+
 		switch(licz_modulo)
 		{
-			case 0:	
-			SEG=0x3F;
-			PTWY=1;
-			break;
 			case 1:
 			SEG=0x6;
-			PTWY=2;
 			break;
 			case 2:
 			SEG=0x5B;
-			PTWY=4;
 			break;
 			case 3:
 			SEG=0x4F;
-			PTWY=8;
-			licz_modulo=-1;
+			break;
+			case 4:
+			SEG=0x66;
+			break;
+			case 5:
+			SEG=0x6D;				
+			break;
+			case 6:
+			SEG=0x7D;
+			licz_modulo=0;
 			break;
 		}
 	}
