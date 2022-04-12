@@ -1,0 +1,22 @@
+#include "main_base.h"
+
+int main(void) {
+	HAL_Init();
+	SystemClock_Config();
+	 RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;//konfiguracja portu c
+	 GPIOC->MODER |= GPIO_Mode_OUT << (8*2);// 1 - output
+	 GPIOC->MODER |= GPIO_Mode_IN << (11*2); // 0 - input (default)
+	 GPIOC->PUPDR |= 1 << 22 ; // 0 - (default)
+	 while(1)
+	 {
+	 if(GPIOC->IDR&2048)
+		 {
+		 GPIOC->BSRR = 0x0100 << 16; //0x4000
+		 }
+	 else
+		 {
+		 GPIOC->BSRR = 0x0100;
+		 }
+	 }
+
+}
