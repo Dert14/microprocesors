@@ -1,0 +1,50 @@
+#include <reg52.h>
+#include <intrins.h>
+#include "mkd51sim.h"
+
+//--------------------------------------------	
+
+ unsigned char xdata PTWE _at_ 0x8008;   
+ unsigned char xdata PTWY _at_ 0x8009;  
+ unsigned char xdata PTSEG _at_ 0x8018;   
+ unsigned char xdata POT0 _at_ 0x8005;  
+ bit stan = 0;
+ char stan_2 = 0;
+
+ 
+
+void main(void) {
+	 
+	TMOD=1;			 
+  TH0=(-50000)>>8;		
+  TL0=(-50000)&0xff;	
+	TCON=0x10;			
+
+	while(1)
+		{
+			if((TF0) && stan == 0)
+		{
+			TF0=0;
+			stan = 1;
+			stan_2++;
+			
+		}
+		if(stan == 1 && (TF0))
+		{
+
+			stan = 0;
+			TF0=0;
+			stan_2++;
+		}
+		if(stan_2 == 20)
+		{
+			PTWY=1;
+			stan_2=0;
+		}
+		else if(stan_2 == 10)
+		{
+			PTWY=0;
+		}
+
+}
+}

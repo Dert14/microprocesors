@@ -1,0 +1,34 @@
+#include "main_base.h"
+#include "stdbool.h"
+
+
+int main(void) {
+	SysTick->VAL=0; // Brak preskalera
+	SysTick->CTRL=5;
+	SysTick->LOAD=(180000-1)*5; // Początkowy stan licznika
+	int stan1 = 0;
+
+	RCC->AHB1ENR |= RCC_AHB1Periph_GPIOG;
+	GPIOG->MODER |= GPIO_Mode_OUT << (13*2);// 1 - output
+
+	while(1)
+	{
+			if((SysTick->CTRL&0x10000))
+				{
+				stan1++;
+				SysTick->LOAD=(180000-1)*5;
+				}
+
+
+			if(stan1==10)
+				{
+				GPIOG->BSRR = GPIO_Pin_13;
+				}
+			else if (stan1==20)
+				{
+				GPIOG->BSRR = GPIO_Pin_13<<16;
+				stan1=0;
+				}
+	}
+
+}
