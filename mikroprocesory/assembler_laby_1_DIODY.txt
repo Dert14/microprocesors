@@ -1,0 +1,98 @@
+//świecenie leda 8
+
+mov r0,#255
+mov r1,#255
+mov r3,#255
+mov r4,#255
+endloop:
+
+DJNZ r0,dioda1
+mov r0,#255
+DJNZ r1,dioda2
+mov r1,#255
+sjmp endloop2
+sjmp endloop
+
+
+dioda1:
+clr P1.6
+sjmp endloop
+
+dioda2:
+dec r0
+sjmp endloop
+
+endloop2:
+setb p1.6
+DJNZ r3, dioda3
+mov r3,#255
+DJNZ r4, dioda4
+sjmp endloop
+
+dioda3:
+nop
+sjmp endloop2
+
+dioda4:
+nop
+sjmp endloop2
+end
+
+//świecenie leda z linijki
+
+mov a,#255
+mov r0,#255
+mov r1,#2
+endloop:
+jz akumulator_zero
+dec a
+nop
+sjmp endloop
+akumulator_zero:
+mov a,#255
+DJNZ r0,endloop
+mov r0,#255
+lcall swiec
+DJNZ r1,endloop
+lcall nie_swiec
+mov r1,#2
+sjmp endloop
+
+swiec:
+mov r2,a
+mov a,#1
+mov dptr,#8008h
+movx @dptr,a
+mov a,r2
+ret
+
+nie_swiec:
+mov r2,a
+mov a,#0
+mov dptr,#8008h
+movx @dptr,a
+mov a,r2
+ret
+
+end
+
+//linijka diodowa krótki kod
+
+mov dptr,#8008h
+mov r1,#255
+mov r2,#255
+
+loop1:
+movx @dptr,A
+DJNZ r1,loop1
+mov r1,#255
+DJNZ r2,loop1
+mov r2,#255
+jz loop2
+mov a,#0
+sjmp loop1
+
+loop2:
+mov a,#1
+sjmp loop1
+end
