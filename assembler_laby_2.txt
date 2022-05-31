@@ -1,0 +1,20 @@
+		PUBLIC  _GET_ADC
+		
+ 				
+PRGSEG  SEGMENT CODE
+		RSEG    PRGSEG
+		
+_GET_ADC:
+		mov dptr,#8000h
+		mov dpl, r7
+		movx @dptr,A
+
+		loop:
+		djnz r0,loop
+		
+		movx A,@dptr
+		mov r7,A
+
+        RET
+
+		END

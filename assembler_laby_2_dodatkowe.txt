@@ -1,0 +1,17 @@
+		PUBLIC  busy_lcd
+		
+ 				
+PRGSEG  SEGMENT CODE
+		RSEG    PRGSEG
+			
+			busy_lcd:
+			mov dptr,#8012h
+			movx a,@dptr
+
+			jnz delay
+			ret
+			
+			delay:
+			nop
+			sjmp busy_lcd
+end

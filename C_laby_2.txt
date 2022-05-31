@@ -1,0 +1,24 @@
+/*baza to MKD51_CLEAN
+
+tworzymy funkcje w asemblerze do odczytu wartosci z potencjometrów 
+wykorzystujemy funkcje w jezyku C
+wizualizujemy wartosci odczytane na 7 seg oraz linijce diod
+
+*/
+
+
+#include <reg52.h>
+#include <intrins.h>
+#include "mkd51sim.h"
+
+unsigned char GET_ADC(unsigned char kanal_pomiarowy);
+
+ unsigned char xdata PTWY _at_ 0x8008;    
+ unsigned char xdata PTSEG _at_ 0x8018; 
+ 
+void main(void) {
+	while(1){
+		PTWY=GET_ADC(5);
+		PTSEG=GET_ADC(6);
+	}
+}	
