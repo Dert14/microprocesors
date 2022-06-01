@@ -38,6 +38,65 @@ nop
 sjmp endloop2
 end
 
+//świecenie leda krócej
+
+mov a,#255
+mov r0,#255
+mov r1,#2
+;mov dptr,#8008h
+
+loop:
+JZ a_zero
+subb a,#1
+sjmp loop
+
+a_zero:
+mov a,#255
+DJNZ r0,loop
+DJNZ r1,swiec
+mov r0,#255
+clr p1.6
+mov r1,#2
+sjmp loop
+
+swiec:
+setb p1.6
+mov r0,#255
+sjmp loop
+end
+
+//świecenie linijki analog
+
+mov a,#255
+mov r0,#255
+mov r1,#2
+mov dptr,#8008h
+
+loop:
+JZ a_zero
+subb a,#1
+sjmp loop
+
+a_zero:
+mov a,#255
+DJNZ r0,loop
+DJNZ r1,swiec
+mov r0,#255
+mov a,#0
+movx @dptr,a
+mov a,#255
+mov r1,#2
+sjmp loop
+
+swiec:
+mov a,#3
+movx @dptr,a
+mov a,#255
+mov r0,#255
+sjmp loop
+end
+
+
 //świecenie leda z linijki
 
 mov a,#255

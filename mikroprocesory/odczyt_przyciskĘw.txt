@@ -1,0 +1,6 @@
+loop:
+mov dptr,#8008h
+movx a,@dptr
+sjmp loop
+
+end

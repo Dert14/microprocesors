@@ -1,0 +1,45 @@
+#include "main_base.h"
+
+int x = 120, y = 160, dx = 1, dy = 1, a=120, b=120;
+
+void move_square_asm();
+unsigned short int RGB16Pack(unsigned char, unsigned char, unsigned char);
+void SetCenterPixel();
+void mruganie_ledem();
+
+
+void fillMemory(void* adres_bazowy, unsigned long rozmiar,unsigned short int wartosc);
+
+void move_square_C() {
+
+	x += dx;
+	y += dy;
+	if (x <= 1 || x >= 240 - 34)
+		dx = -dx;
+	if (y <= 1 || y >= 320 - 34)
+		dy = -dy;
+}
+
+int main(void) {
+	HAL_Init();
+	SystemClock_Config();
+
+
+#ifndef STMSIM
+	BSP_SDRAM_Init();
+	LCD_Config();
+#endif
+
+	RCC->AHB1ENR |= RCC_AHB1Periph_GPIOG;
+	GPIOG->MODER |= GPIO_Mode_OUT << (14*2);// 1 - output
+	RCC->AHB1ENR |= RCC_AHB1Periph_GPIOA;
+	GPIOG->MODER |= GPIO_Mode_OUT << (13*2);// 1 - output
+
+
+
+	while (1) {
+		mruganie_ledem();
+
+
+	}
+}

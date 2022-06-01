@@ -6,14 +6,19 @@ PRGSEG  SEGMENT CODE
 		
 _GET_ADC:
 		mov dptr,#8000h
-		mov dpl, r7
+		mov dpl, r7 
+		;umieszczamy w mlodszym bajcie dptr
 		movx @dptr,A
+		;uruchamia odczyt sie zdaje
+		mov r0,#255
 
 		loop:
 		djnz r0,loop
-		
+		;opoznienie
 		movx A,@dptr
+		;odczyt
 		mov r7,A
+		;tu zwracamy
 
         RET
 
